@@ -61,7 +61,7 @@ io.on('connection', (socket) => {
         io.to(nombreSala).emit('usuariosConectados', salas[nombreSala].usuarios.map(usuario => usuario.nombre));
       }
 
-      console.log(salas[nombreSala])
+      // console.log(salas[nombreSala])
 
       // salas[nombreSala]["usuarios"].push(nombre)
 
@@ -108,15 +108,13 @@ io.on('connection', (socket) => {
   // Envio los mensajes al cliente
     socket.on("mensaje", (mensaje, nombre, sala) => {
 
-      // if (!salas["mensajes"]) {
-      //   salas["mensajes"] = []; // Crea una nueva lista de mensajes si aún no existe
-      // }
+      const usuarioExiste = salas[sala].usuarios.some(usuario => usuario.socket === socket)
 
       if (salas[sala]["mensajes"].length >= 50) {
         salas[sala]["mensajes"] = []
       }
 
-      if (mensaje.length > 0) {
+      if (mensaje.length > 0 && usuarioExiste) {
         salas[sala].mensajes.push({nombre, mensaje});
       }
 
@@ -125,13 +123,13 @@ io.on('connection', (socket) => {
 
     socket.on("escribiendo", (nombre, sala) => {
 
-      socket.to(sala).emit("escribiendo", nombre)
+      const usuarioExiste = salas[sala].usuarios.some(usuario => usuario.socket === socket)
+
+      if (usuarioExiste) {
+        socket.to(sala).emit("escribiendo", nombre)
+      }
 
     })
-
-  // Envio un mensaje una vez el usuario se conecta a la sala
-    // socket.on("usuarioConectado", (nombre, nombreSala) => {
-    // })
 
     socket.on("borrarUsuario", sala => {
 

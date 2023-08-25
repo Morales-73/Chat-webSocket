@@ -6,7 +6,7 @@ export function Sala({socket, nombre, sala}) {
     <>
         <h4 className="text-center mt-5">Sala</h4>
 
-        <div className="row d-flex justify-content-center h-50 d-flex">
+        <div className="row d-flex justify-content-center h-75 d-flex">
             <PanelDeUsuarios socket={socket} sala={sala} nombre={nombre}/>
             <PanelDeMensajes socket={socket} nombre={nombre} sala={sala}/>
         </div>
